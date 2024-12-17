@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -13,20 +13,15 @@ var DB *gorm.DB
 
 // ConnectDatabase connects to the database and returns the DB instance.
 func ConnectDatabase() *gorm.DB {
-	// PostgreSQL DSN format:
-	// "host=<HOST> user=<USERNAME> password=<PASSWORD> dbname=<DBNAME> port=<PORT> sslmode=<SSLMODE>"
-	dsn := "host=dpg-ctgiqmd2ng1s738j303g-a user=admin dbname=farmers_market_db sslmode=disable password=0hj6px0nhvaahHftsmOFakdtYWbdN1AU"
-	database, err := gorm.Open(
-		postgres.Open(dsn),
-		&gorm.Config{},
-	)
+	dsn := "root:@tcp(127.0.0.1:3306)/farmers_market_db?charset=utf8mb4&parseTime=True&loc=Local"
+	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
-		log.Fatal("Failed to connect to the PostgreSQL database:", err)
+		log.Fatal("Failed to connect to the database!")
 	}
 
 	DB = database
-	log.Println("PostgreSQL database connected successfully!")
+	log.Println("Database connected successfully!")
 	return database // Return the connected database instance
 }
 
